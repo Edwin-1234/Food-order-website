@@ -24,24 +24,13 @@ exports.registerUser = async (req, res) => {
 
     const savedUser = await user.save();
 
-    // remove password before sending back
+    // remove password before sending
     const userData = savedUser.toObject();
     delete userData.password;
 
-    // create token
-    const token = generateToken(savedUser._id, savedUser.role);
-
-    // set cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
-
     res.status(201).json({
       message: "Registration successful",
-      user: userData,
+      user: userData
     });
 
   } catch (err) {
@@ -75,7 +64,7 @@ exports.loginUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
     res.status(200).json({
@@ -89,7 +78,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// get profile
+// profile
 exports.getProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
