@@ -2,14 +2,19 @@ const express = require('express');
 const router = express.Router();
 const { 
     registerUser,
+    registerOwner,
     loginUser,
-    getProfile,checkUser,
+    getProfile,
+    checkUser,
     logoutUser
 } = require('../controllers/authController');
 const { protect } = require('../middlewares/authMiddleware');
 
-// normal users + restaurant owners register
-router.post('/register', registerUser);
+// user registration
+router.post('/register/user', registerUser);
+
+// restaurant owner registration
+router.post('/register/owner', registerOwner);
 
 // common login
 router.post('/login', loginUser);
@@ -17,6 +22,7 @@ router.post('/login', loginUser);
 // get own profile - needs protect
 router.get('/profile', protect, getProfile);
 
+// check user role
 router.get('/checkUser', protect, checkUser);
 
 // logout
