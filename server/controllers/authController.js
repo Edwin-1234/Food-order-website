@@ -2,10 +2,10 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 
-// register
+// register normal user
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, phone, password, address, role } = req.body;
+    const { name, email, phone, password, address } = req.body;
 
     const existing = await User.findOne({ email });
     if (existing)
@@ -18,26 +18,60 @@ exports.registerUser = async (req, res) => {
       email,
       phone,
       address,
-      role: role || "user",
+      role: "user",
       password: hashed,
     });
 
     const savedUser = await user.save();
-
-    // remove password before sending
     const userData = savedUser.toObject();
     delete userData.password;
 
     res.status(201).json({
-      message: "Registration successful",
+      message: "User registered successfully",
       user: userData
     });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Error in registration" });
+    res.status(500).json({ message: "Error in user registration" });
   }
 };
+
+// register restaurant owner
+exports.registerOwner = async (req, res) => {
+  try {
+    const { name, email, phone, password, address } = req.body;
+
+    const existing = await User.findOne({ email });
+    if (existing)
+      return res.status(400).json({ message: "Owner already exists" });
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    const owner = new User({
+      name,
+      email,
+      phone,
+      address,
+      role: "restaurant_owner",
+      password: hashed,
+    });
+
+    const savedOwner = await owner.save();
+    const ownerData = savedOwner.toObject();
+    delete ownerData.password;
+
+    res.status(201).json({
+      message: "Owner registered successfully",
+      user: ownerData
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error in owner registration" });
+  }
+};
+
 
 // login
 exports.loginUser = async (req, res) => {
