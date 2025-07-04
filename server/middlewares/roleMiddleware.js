@@ -9,3 +9,11 @@ exports.ownerOnly = (req, res, next) => {
     return res.status(403).json({ message: "Restaurant owner only" });
   next();
 };
+
+exports.userOnly = (req, res, next) => {
+  if (req.user.role !== "user") {
+    return res.status(403).json({ message: "Only users can perform this action" });
+  }
+  next();
+};
+
