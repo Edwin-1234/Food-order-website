@@ -18,7 +18,7 @@ const paymentRouter = require('./paymentRoutes');
 
 // router.use('/menu', menuRouter);
 
-// router.use('/restaurant', restaurantRouter);
+router.use('/restaurant', restaurantRouter);
 
 // mount under /api/auth
 router.use('/auth', authRouter);

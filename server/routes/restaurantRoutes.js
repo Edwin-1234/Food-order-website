@@ -1,24 +1,29 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
+const {
+  createRestaurant,
+  getAllRestaurants,
+  getRestaurantById,
+  updateRestaurant,
+  deleteRestaurant
+} = require('../controllers/restaurantController');
 
-// const {
-//   getAllRestaurants,
-//   getRestaurantById,
-//   createRestaurant,
-//   updateRestaurant,
-//   deleteRestaurant,
-// } = require('../controllers/restaurantController');
+const { protect } = require('../middlewares/authMiddleware');
+const { ownerOnly } = require('../middlewares/roleMiddleware');
 
-// const { protect } = require('../middlewares/authMiddleware');  // for token check
-// const { ownerOnly } = require('../middlewares/roleMiddleware'); // custom role check
+// create restaurant (owner only)
+router.post('/', protect, ownerOnly, createRestaurant);
 
-// // anyone can see
-// router.get('/', getAllRestaurants);
-// router.get('/:id', getRestaurantById);
+// get all restaurants (public)
+router.get('/', getAllRestaurants);
 
-// // only logged-in restaurant owners can do these:
-// router.post('/', protect, ownerOnly, createRestaurant);
-// router.patch('/:id', protect, ownerOnly, updateRestaurant);
-// router.delete('/:id', protect, ownerOnly, deleteRestaurant);
+// get restaurant by id (public)
+router.get('/:id', getRestaurantById);
 
-// module.exports = router;
+// update restaurant (owner only)
+router.patch('/:id', protect, ownerOnly, updateRestaurant);
+
+// delete restaurant (owner only)
+router.delete('/:id', protect, ownerOnly, deleteRestaurant);
+
+module.exports = router;
