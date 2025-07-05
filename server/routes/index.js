@@ -12,7 +12,7 @@ const paymentRouter = require('./paymentRoutes');
 
 // router.use('/coupon', couponRouter);
 
-// router.use('/order', orderRouter);
+router.use('/order', orderRouter);
 
 router.use('/cart', cartRouter);
 

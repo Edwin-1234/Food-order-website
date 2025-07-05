@@ -10,19 +10,25 @@ exports.addToCart = async (req, res) => {
     if (!restaurant) return res.status(404).json({ message: "Restaurant not found" });
 
     const item = restaurant.menu.find((i) => i._id.toString() === itemId);
-    if (!item) return res.status(404).json({ message: "Item not found in menu" });
+    if (!item) return res.status(404).json({ message: "Item not found" });
 
     let cart = await Cart.findOne({ userId: req.user.id });
+
     if (!cart) {
+      // create new cart
       cart = new Cart({
         userId: req.user.id,
+        restaurantId,
         items: [],
-        updatedAt: new Date(),
       });
+    } else if (cart.restaurantId.toString() !== restaurantId) {
+      // different restaurant, reset cart
+      cart.items = [];
+      cart.restaurantId = restaurantId;
     }
 
     // check if item already exists
-    const existingItem = cart.items.find((i) => i.itemId.toString() === itemId);
+    const existingItem = cart.items.find((i) => i.itemId === itemId);
     if (existingItem) {
       existingItem.quantity += quantity;
     } else {
