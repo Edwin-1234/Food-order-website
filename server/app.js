@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const router = require('./routes/index');
 const connectDB = require('./config/db');
+const cors = require('cors')
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
 
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
