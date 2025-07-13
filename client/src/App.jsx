@@ -6,6 +6,8 @@ import Restaurants from './pages/Restaurants'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
 import Navbar from './components/Navbar'
+import Logout from './pages/Logout'
+
 
 function App() {
   return (
@@ -19,6 +21,7 @@ function App() {
           <Route path="/restaurants" element={<Restaurants />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </div>
     </Router>

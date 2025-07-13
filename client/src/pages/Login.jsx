@@ -1,19 +1,24 @@
 import { useState } from 'react'
 import axios from '../utils/axiosInstance'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const navigate = useNavigate()
+  const { setUser } = useAuth()
 
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
       const res = await axios.post('/auth/login', { email, password })
-      console.log('Login success:', res.data)
-      navigate('/') // go to home on success
+
+      // ✅ Set user in context immediately
+      setUser(res.data.user)
+
+      navigate('/') // redirect to homepage
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed')
     }
