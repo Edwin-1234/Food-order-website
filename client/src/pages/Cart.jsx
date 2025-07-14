@@ -1,9 +1,2 @@
-const Cart = () => {
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold">Your Cart</h2>
-      <p className="text-gray-600">Cart items and total summary will be displayed here.</p>
-    </div>
-  )
-}
+const Cart = () => <h1 className="p-6">🛒 Cart Page (Users only)</h1>
 export default Cart
